@@ -1,0 +1,21 @@
+* 문제설명
+낚시앱에서 사용하는 FISH_INFO 테이블은 잡은 물고기들의 정보를 담고 있습니다. FISH_INFO 테이블의 구조는 다음과 같으며 
+ID, FISH_TYPE, LENGTH, TIME은 각각 잡은 물고기의 ID, 물고기의 종류(숫자), 잡은 물고기의 길이(cm), 물고기를 잡은 날짜를 나타냅니다.
+
+FISH_NAME_INFO 테이블은 물고기의 이름에 대한 정보를 담고 있습니다. FISH_NAME_INFO 테이블의 구조는 다음과 같으며, 
+FISH_TYPE, FISH_NAME 은 각각 물고기의 종류(숫자), 물고기의 이름(문자) 입니다.
+
+* 문제
+물고기 종류 별로 가장 큰 물고기의 ID, 물고기 이름, 길이를 출력하는 SQL 문을 작성해주세요.
+물고기의 ID 컬럼명은 ID, 이름 컬럼명은 FISH_NAME, 길이 컬럼명은 LENGTH로 해주세요.
+결과는 물고기의 ID에 대해 오름차순 정렬해주세요.
+단, 물고기 종류별 가장 큰 물고기는 1마리만 있으며 10cm 이하의 물고기가 가장 큰 경우는 없습니다.
+
+* 정답
+select a.id, FISH_NAME, a.LENGTH
+from fish_info a join fish_name_info b on a.fish_type = b.fish_type
+where length = (select max(sub.length)
+               from fish_info sub
+               WHERE sub.FISH_TYPE = a.FISH_TYPE
+               GROUP BY sub.FISH_TYPE)
+order by a.id
